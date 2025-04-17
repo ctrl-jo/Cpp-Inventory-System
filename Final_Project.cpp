@@ -37,7 +37,7 @@ public:
     }
     
     void menu() {
-        int choice;
+        int user_choice;
         do {
             cout << "\n\n***************************************************************\n";
             cout << "                       Inventory System                        \n";
@@ -49,9 +49,9 @@ public:
             cout << "[4] Display Inventory\n";
             cout << "[5] Exit\n";
             cout << "Mr./Ms. " << user_name << ", please enter the number of your choice: ";
-            cin >> choice;
+            cin >> user_choice;
     
-            switch (choice) {
+            switch (user_choice) {
                 case 1:
                     add_Product();
                     break;
