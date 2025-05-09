@@ -1,6 +1,6 @@
 #include <iostream>
+#include <iomanip>
 using namespace std;
-
 const int MAX_PRODUCTS = 100;
 
 class Final_Project {
@@ -33,7 +33,7 @@ public:
         } else if (choices == 2) {
             courtesy_title = "Ms.";
         } else {
-            cout << "Invalid choice. Program will now exit.\n";
+            cout << "Invalid Input!. Program terminated.\n";
             return false;
         }
 
@@ -46,6 +46,9 @@ public:
     }
 
     void add_Product() {
+        cout << "\n\n***************************************************************\n";
+        cout << "                       Adding Product                         \n";
+        cout << "***************************************************************\n";
         if (product_count >= MAX_PRODUCTS) {
             cout << "Inventory is full.\n";
             return;
@@ -53,21 +56,21 @@ public:
 
         cout << "Enter product name: ";
         getline(cin, product_name[product_count]);
-
         cout << "Enter product quantity (for " << product_name[product_count] << "): ";
         cin >> quantity[product_count];
-
         cout << "Enter product price (for " << product_name[product_count] << "): ";
         cin >> price[product_count];
-
         cout << "\nProduct Added!\n";
         product_count++;
         cin.ignore();
     }
 
     void delete_Product() {
+        cout << "\n\n***************************************************************\n";
+        cout << "                       Deleting Product                         \n";
+        cout << "***************************************************************\n";
         string name;
-        cout << "Enter the product name to delete: ";
+        cout << "Enter the product name: ";
         getline(cin, name);
 
         bool found = false;
@@ -90,8 +93,11 @@ public:
     }
 
     void update_Product() {
+        cout << "\n\n***************************************************************\n";
+        cout << "                       Updating Product                         \n";
+        cout << "***************************************************************\n";
         string name;
-        cout << "Enter the product name to update: ";
+        cout << "Enter product name: ";
         getline(cin, name);
 
         bool found = false;
@@ -134,7 +140,7 @@ int main() {
     Final_Project Inventory;
     Inventory.input_name();
     if (!Inventory.courtesy()) {
-        return 0; // Terminate cleanly if invalid courtesy input
+        return 0; // stop the program if invalid courtesy choice
     }
 
     int user_choice;
@@ -167,11 +173,28 @@ int main() {
             case 4:
                 Inventory.display_Product();
                 break;
-            case 5:
-                cout << "Thank you for using the Inventory System. Goodbye!\n";
-                return 0;
-            default:
-                cout << "Invalid choice. Try again.\n";
+                case 5: {
+                    char final_choice;
+                    bool valid_input = false;
+                    //another loop for exit validation
+                    while (!valid_input) {
+                        cout << "Are you sure you want to exit? (Y/N): ";
+                        cin >> final_choice;
+                        cin.ignore();
+                
+                        if (final_choice == 'Y' || final_choice == 'y') {
+                            cout << "Thank you for using the Inventory System. \n";
+                            return 0; // Exit the program
+                        } else if (final_choice == 'N' || final_choice == 'n') {
+                            valid_input = true; // Exit the loop and return to menu
+                        } else {
+                            cout << "\nInvalid input.";
+                        }
+                    }
+                
+                    break;
+                }
+                
         }
     }
 
