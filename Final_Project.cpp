@@ -1,5 +1,6 @@
 #include <iostream>
 #include <iomanip>
+
 using namespace std;
 const int MAX_PRODUCTS = 100;
 
@@ -44,26 +45,50 @@ public:
     string getFullName() {
         return courtesy_title + " " + user_name;
     }
-
+//
     void add_Product() {
-        cout << "\n\n***************************************************************\n";
-        cout << "                       Adding Product                         \n";
-        cout << "***************************************************************\n";
-        if (product_count >= MAX_PRODUCTS) {
-            cout << "Inventory is full.\n";
-            return;
+    cout << "\n\n***************************************************************\n";
+    cout << "                       Adding Product                         \n";
+    cout << "***************************************************************\n";
+    if (product_count >= MAX_PRODUCTS) {
+        cout << "Inventory is full.\n";
+        return;
+    }
+    string new_product;
+    cout << "Enter product name: ";
+    getline(cin, new_product);
+    // Convert input to lowercase for comparison
+    string lowerNewProduct = new_product;
+    for (int i = 0; i < lowerNewProduct.length(); i++) {
+        if (lowerNewProduct[i] >= 'A' && lowerNewProduct[i] <= 'Z') {
+            lowerNewProduct[i] = lowerNewProduct[i] + 32;
+        }
+    }
+    // Check for duplicates
+    for (int i = 0; i < product_count; i++) {
+        string existing = product_name[i];
+        for (int j = 0; j < existing.length(); j++) {
+            if (existing[j] >= 'A' && existing[j] <= 'Z') {
+                existing[j] = existing[j] + 32;
+            }
         }
 
-        cout << "Enter product name: ";
-        getline(cin, product_name[product_count]);
-        cout << "Enter product quantity (for " << product_name[product_count] << "): ";
-        cin >> quantity[product_count];
-        cout << "Enter product price (for " << product_name[product_count] << "): ";
-        cin >> price[product_count];
-        cout << "\nProduct Added!\n";
-        product_count++;
-        cin.ignore();
+        if (lowerNewProduct == existing) {
+            cout << "Product already exists.\n";
+            return;
+        }
     }
+
+    // If not duplicate, continue to input details
+    product_name[product_count] = new_product;
+    cout << "Enter product quantity (for " << product_name[product_count] << "): ";
+    cin >> quantity[product_count];
+    cout << "Enter product price (for " << product_name[product_count] << "): ";
+    cin >> price[product_count];
+    cout << "\nProduct Added!\n";
+    product_count++;
+    cin.ignore();
+}
 
     void delete_Product() {
         cout << "\n\n***************************************************************\n";
@@ -72,10 +97,26 @@ public:
         string name;
         cout << "Enter the product name: ";
         getline(cin, name);
-
+    
         bool found = false;
         for (int i = 0; i < product_count; i++) {
-            if (product_name[i] == name) {
+           
+            string lowerInput = name;
+            string lowerProductName = product_name[i];
+              
+            for (int j = 0; j < lowerInput.length(); j++) {
+                if (lowerInput[j] >= 'A' && lowerInput[j] <= 'Z') {
+                    lowerInput[j] = lowerInput[j] + 32; // Convert to lowercase using ASCII code table
+                }
+            }
+            
+            for (int j = 0; j < lowerProductName.length(); j++) {
+                if (lowerProductName[j] >= 'A' && lowerProductName[j] <= 'Z') {
+                    lowerProductName[j] = lowerProductName[j] + 32; 
+                }
+            }
+            
+            if (lowerProductName == lowerInput) {
                 for (int j = i; j < product_count - 1; j++) {
                     product_name[j] = product_name[j + 1];
                     quantity[j] = quantity[j + 1];
@@ -99,13 +140,29 @@ public:
         string name;
         cout << "Enter product name: ";
         getline(cin, name);
-
+    
         bool found = false;
         for (int i = 0; i < product_count; i++) {
-            if (product_name[i] == name) {
-                cout << "Enter new quantity (for " << name << "): ";
+           
+            string lowerInput = name;
+            string lowerProductName = product_name[i];
+            
+            for (int j = 0; j < lowerInput.length(); j++) {
+                if (lowerInput[j] >= 'A' && lowerInput[j] <= 'Z') {
+                    lowerInput[j] = lowerInput[j] + 32; 
+                }
+            }
+            
+            for (int j = 0; j < lowerProductName.length(); j++) {
+                if (lowerProductName[j] >= 'A' && lowerProductName[j] <= 'Z') {
+                    lowerProductName[j] = lowerProductName[j] + 32; 
+                }
+            }
+        
+            if (lowerProductName == lowerInput) {
+                cout << "Enter new quantity (for " << product_name[i] << "): ";
                 cin >> quantity[i];
-                cout << "Enter new price (for " << name << "): ";
+                cout << "Enter new price (for " << product_name[i] << "): ";
                 cin >> price[i];
                 cout << "Product updated.\n";
                 found = true;
@@ -123,15 +180,22 @@ public:
             cout << "Inventory is empty.\n";
             return;
         }
-
+    
         cout << "\n\n***************************************************************\n";
-        cout << "                       Product Details                         \n";
+        cout << "                       Product Details:                         \n";
         cout << "***************************************************************\n";
+        
+        // Table 
+        cout << left << setw(25) << "Product Name" 
+             << "| " << setw(20) << "Quantity" 
+             << "| " << "Price" << endl;
+        
+        cout << setfill('-') << setw(64) << "-" << setfill(' ') << endl;
+        
         for (int i = 0; i < product_count; i++) {
-            cout << "Product Name: " << product_name[i] << "\n";
-            cout << "Quantity: " << quantity[i] << "\n";
-            cout << "Price: " << price[i] << "\n";
-            cout << "-------------------------------\n";
+            cout << left << setw(25) << product_name[i] 
+                 << "| " << setw(20) << quantity[i] 
+                 << "| " << fixed << setprecision(2) << price[i] << endl;
         }
     }
 };
@@ -200,3 +264,23 @@ int main() {
 
     return 0;
 }
+
+
+/* for last part exit validation
+cout << "\nAre you sure you want to exit? (Y/N): ";
+                cin >> final_choice;
+                if (final_choice == "Y" || final_choice == "y") {
+                    cout << "Thank you for using the ATM Withdrawal System.\n";
+                 // Exit the program
+                } else if (final_choice == "N" || final_choice == "n") {
+                    return 0; 
+                } else {
+                    cout << "Thank you for using the ATM Withdrawal System.\n";
+                }
+
+last task: 
+1. update function: when searching for a product the product should ignore the case sensitivity. 
+e.g "apple" and "Apple" should be treated as the same product; also in delete function. 
+2. exit validation: when the user chooses to exit the program, ask them if they are sure they want to exit.
+3. when adding products, the program should check if the product already exists in the inventory. If it does, it should not allow the user to add it again and should display a message indicating that the product already exists.
+*/
